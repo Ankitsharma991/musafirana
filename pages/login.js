@@ -1,4 +1,3 @@
-import React from "react";
 import { getProviders, signIn } from "next-auth/react";
 
 function Login({ providers }) {
