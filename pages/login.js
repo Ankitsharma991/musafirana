@@ -1,19 +1,23 @@
 import { getProviders, signIn } from "next-auth/react";
 
 function Login({ providers }) {
-  console.log("Providers : ", providers);
   return (
-    <div>
+    <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center">
       <img
         className="w-52 mb-5"
         src="https://img.icons8.com/?size=512&id=iefkXAGbJmaP&format=png"
         alt="picture"
       />
-      {/* {Object.values(providers).map((provider) => (
-        <div>
-          <button>Login with {provider.name}</button>
+      {Object.values(providers).map((provider) => (
+        <div key={provider.name}>
+          <button
+            className="bg-[#18D860] text-white p-5 rounded-full"
+            onClick={() => signIn(provider.id, { callbackUrl: "/" })}
+          >
+            Login with {provider.name}
+          </button>
         </div>
-      ))} */}
+      ))}
     </div>
   );
 }
@@ -22,6 +26,8 @@ export default Login;
 
 export async function getServerSideProps() {
   const providers = await getProviders();
+  // console.log("Providers : ", providers);
+
   return {
     props: {
       providers,
