@@ -39,7 +39,6 @@ function Center() {
       <section
         className={`flex items-end  space-x-7 bg-gradient-to-b to-black ${color} text-white h-80`}
       >
-        <h1>Hello</h1>
       </section>
     </div>
   );
