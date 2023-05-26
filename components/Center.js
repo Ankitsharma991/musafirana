@@ -1,10 +1,11 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { shuffle } from "lodash";
 import { playlistIdState, playlistState } from "@/atoms/playlistAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useSpotify from "@/hooks/useSpotify";
+import Songs from "./Songs";
 
 const colors = [
   "from-indigo-500",
@@ -15,8 +16,14 @@ const colors = [
   "from-pink-500",
   "from-purple-500",
 ];
+// import { useRouter } from "next/router";
 
 function Center() {
+  // const router = useRouter();
+
+  // function handleClick() {
+  //   router.push("/login");
+  // }
   const { data: session } = useSession();
   const [color, setColor] = useState(null);
   const spotifyApi = useSpotify();
@@ -28,20 +35,28 @@ function Center() {
   }, [playlistId]);
 
   useEffect(() => {
-    spotifyApi
-      .getPlaylist(playlistId)
-      .then((data) => {
-        setPlaylist(data.body);
-      })
-      .catch((err) => console.log("Something went wrong!", err));
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi
+        .getPlaylist(playlistId)
+        .then((data) => {
+          setPlaylist(data.body);
+        })
+        .catch((err) => console.log("Something went wrong!", err));
+    }
   }, [spotifyApi, playlistId]);
 
   console.log("PLAYLIST", playlist);
 
   return (
-    <div className="flex-grow ">
+    <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide ">
       <header className="absolute top-5 right-8">
-        <div className="flex bg-red-300 items-center  space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2">
+        <div
+          className="flex bg-black text-white items-center  space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2"
+          onClick={() => {
+            signOut();
+            // handleClick();
+          }}
+        >
           <img
             className="rounded-full  h-10 w-10"
             src={session ? session.user.image : "User Image"}
@@ -52,7 +67,7 @@ function Center() {
         </div>
       </header>
       <section
-        className={`flex items-end  space-x-7 bg-gradient-to-b to-black ${color} text-white h-80`}
+        className={`flex items-end p-8  space-x-7 bg-gradient-to-b to-black ${color} text-white h-80`}
       >
         <img
           src={playlist?.images?.[0]?.url}
@@ -61,12 +76,14 @@ function Center() {
         />
         <div>
           <p>PLAYLIST</p>
-          <h1 className="text-2xl md:text-3xl xl:text-5xl">{playlist?.name}</h1>
+          <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold">
+            {playlist?.name}
+          </h1>
         </div>
       </section>
-      {/* <div>
+      <div>
         <Songs />
-      </div> */}
+      </div>
     </div>
   );
 }
