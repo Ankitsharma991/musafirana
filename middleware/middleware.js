@@ -3,12 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function middleware(req) {
   console.log("MIDDLEWARE");
-  // token will exists if the user is logged in
   const token = await getToken({ req, secret: process.env.JWT_SECRET });
   const { pathname } = req.nextUrl;
-  //   Allow the require if the following is true...
-  //   1) it's a request for next-auth session and provider fetching
-  // 2) the token exists
 
   if (pathname.includes("/api/auth") || token) {
     return NextResponse.next();

@@ -45,7 +45,7 @@ function Center() {
     }
   }, [spotifyApi, playlistId]);
 
-  console.log("PLAYLIST", playlist);
+  // console.log("PLAYLIST", playlist);
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide ">
