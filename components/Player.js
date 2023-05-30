@@ -1,7 +1,7 @@
 import { currentTrackIdState, isPlayingState } from "@/atoms/songAtom";
 import useSongInfo from "@/hooks/useSongInfo";
 import useSpotify from "@/hooks/useSpotify";
-import { VolumeUpIcon,} from "@heroicons/react/outline";
+import { VolumeUpIcon as Vol } from "@heroicons/react/outline";
 import {
   RewindIcon,
   SwitchHorizontalIcon,
@@ -9,8 +9,8 @@ import {
   PlayIcon,
   FastForwardIcon,
   ReplyIcon,
+  VolumeUpIcon,
 } from "@heroicons/react/solid";
-import { data } from "autoprefixer";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -82,10 +82,20 @@ function Player() {
         <FastForwardIcon className="button" />
         <ReplyIcon className="button" />
       </div>
-      {/* <div>
-        <input type="range" />
-        <VolumeUpIcon />
-      </div> */}
+      <div className="flex items-center space-x-3 md:space-x-4">
+        <Vol className="button" />
+        <input
+          className="w-14 md:w-28"
+          type="range"
+          value={volume}
+          onChange={(e) => {
+            setVolume(e.target.value);
+          }}
+          min={0}
+          max={100}
+        />
+        <VolumeUpIcon className="button" />
+      </div>
     </div>
   );
 }
